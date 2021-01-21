@@ -11,3 +11,8 @@ web-build/
 
 # macOS
 .DS_Store
+
+# Custom
+.ipynb_checkpoints
+unigram_freq.csv
+words.txt
