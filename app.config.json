@@ -1,0 +1,31 @@
+{
+  "expo": {
+    "name": "spelling-bee-solver",
+    "slug": "spelling-bee-solver",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#e8c140"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.zachbellay.spelling-bee-solver",
+      "buildNumber": "1.0.0",
+      "config": {
+        "googleMobileAdsAppId": "ca-app-pub-5654241706205029~9075632098"
+      }
+    },
+    "plugins": [
+      "expo-tracking-transparency"
+    ]
+  }
+}

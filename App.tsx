@@ -8,6 +8,22 @@ import Button from 'react-native-button';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import words from './words.js';
 
+import { requestTrackingPermissionsAsync } from 'expo-tracking-transparency';
+import {
+  AdMobBanner,
+  setTestDeviceIDAsync
+} from 'expo-ads-admob';
+
+import Constants from 'expo-constants';
+
+const testID = 'ca-app-pub-3940256099942544/2934735716';
+const productionID = 'ca-app-pub-5654241706205029/1198524964';
+
+// Is a real device and running in production.
+const isProduction = Constants.isDevice && !__DEV__;
+const adUnitID = isProduction ? productionID : testID;
+
+
 export default function App() {
   const styles = StyleSheet.create({
     centerContainer: {
@@ -18,11 +34,16 @@ export default function App() {
       justifyContent: 'flex-start',
       margin: 15,
     },
+    bannerAdContainer: {
+      flexDirection: 'column',
+      justifyContent: 'flex-start',
+      alignItems: 'center',
+    },
     titleContainer: {
       flexDirection: 'column',
       justifyContent: 'flex-start',
       alignItems: 'center',
-      marginTop: 48,
+      marginTop: 25,
     },
     safeAreaContainer: {
       flex: 1,
@@ -32,7 +53,7 @@ export default function App() {
       fontWeight: 'bold',
     },
     solutionsTitleText: {
-      fontSize: 18,
+      fontSize: 24,
     },
     solutionsContainer: {
       marginTop: 6,
@@ -65,6 +86,9 @@ export default function App() {
       flexGrow: 1,
       flex: 1,
     },
+    itemText: {
+      fontSize: 18
+    },
     title: {
       fontSize: 32,
     },
@@ -74,7 +98,36 @@ export default function App() {
     centerLetter: '',
     surroundingLetters: '',
     solutions: [],
+    adsAllowed: false
   });
+
+  useEffect(() => {
+    const init = async () => {
+      if (!isProduction) {
+        // Set global test device ID
+        await setTestDeviceIDAsync('EMULATOR');
+      }
+
+      const { status } = await requestTrackingPermissionsAsync();
+      if (status === 'granted') {
+        setState({ ...state, adsAllowed: true });
+        console.log('Yay! I have user permission to track data');
+      }
+      console.log("yes");
+      console.log(status);
+
+
+    }
+    init();
+    console.log('effect');
+    // (async () => {
+    //   const { status } = await requestTrackingPermissionsAsync();
+    //   if (status === 'granted') {
+    //     console.log('Yay! I have user permission to track data');
+    //   }
+    // })();
+
+  }, []);
 
   const handleSurroundingLettersChange = (text: string): void => {
     const regex: RegExp = /^[A-Z]*$/;
@@ -106,18 +159,24 @@ export default function App() {
       const wordSet = new Set(words[i]);
 
       // Must contain center letter
-      if (!wordSet.has(centerLetter)) 
+      if (!wordSet.has(centerLetter))
         continue;
 
       // Set difference operation
       // set(words[i]) - set(input)
       const difference = new Set([...wordSet].filter((x) => !inputSet.has(x)));
-      if (difference.size === 0) 
+      if (difference.size === 0)
         solutions.push(words[i]);
     }
 
     solutions.sort();
     const columnLength: number = solutions.length;
+
+    // Adds empty words to round out each row
+    const roundedUp = Math.round(columnLength / 3) * 3;
+    const colsToAdd = roundedUp - columnLength;
+    for (let i = 0; i < colsToAdd; ++i)
+      solutions.push(' ');
 
     setState(
       {
@@ -129,13 +188,29 @@ export default function App() {
 
   return (
 
-    <KeyboardAwareScrollView>
+    <KeyboardAwareScrollView keyboardShouldPersistTaps='always'>
       <SafeAreaView style={styles.safeAreaContainer}>
+
+
+        {state.adsAllowed ? (
+          <SafeAreaView style={styles.safeAreaContainer}>
+            <View style={styles.bannerAdContainer}>
+              <AdMobBanner
+                bannerSize="fullBanner"
+                adUnitID={adUnitID}
+                servePersonalizedAds={true} // true or false
+              // onDidFailToReceiveAdWithError={this.bannerError} 
+              />
+            </View>
+          </SafeAreaView>
+        ) :
+          <Text>Please consider enabling tracking to allow banner ads. This supports my app. Thank you!</Text>
+        }
+
 
         <SafeAreaView style={styles.safeAreaContainer}>
           <View style={styles.titleContainer}>
-            <Text style={styles.titleText}>New York Times</Text>
-            <Text style={styles.titleText}>Spelling Bee Puzzle Solver</Text>
+            <Text style={styles.titleText}>Spelling Bee Solver</Text>
           </View>
 
           <View style={styles.centerContainer}>
@@ -151,7 +226,7 @@ export default function App() {
               keyExtractor={(item) => item}
               renderItem={({ item }) => (
                 <View style={{ ...styles.item }}>
-                  <Text>{item}</Text>
+                  <Text style={{ ...styles.itemText }}>{item}</Text>
                 </View>
               )}
             />
