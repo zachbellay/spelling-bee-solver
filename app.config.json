@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "spelling-bee-solver",
+    "name": "Spelling Bee Solver",
     "slug": "spelling-bee-solver",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -19,9 +19,12 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.zachbellay.spelling-bee-solver",
-      "buildNumber": "1.0.0",
+      "buildNumber": "1.0.3",
       "config": {
         "googleMobileAdsAppId": "ca-app-pub-5654241706205029~9075632098"
+      },
+      "infoPlist": {
+        "NSUserTrackingUsageDescription": "This app uses tracking to serve personalized ads to you."
       }
     },
     "plugins": [

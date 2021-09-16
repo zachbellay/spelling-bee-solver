@@ -8,13 +8,13 @@
     "eject": "expo eject"
   },
   "dependencies": {
-    "expo": "~40.0.0",
-    "expo-ads-admob": "~8.4.0",
-    "expo-status-bar": "~1.0.3",
-    "expo-tracking-transparency": "^1.1.2",
+    "expo": "^42.0.0",
+    "expo-ads-admob": "~10.1.2",
+    "expo-status-bar": "~1.0.4",
+    "expo-tracking-transparency": "~1.1.2",
     "react": "16.13.1",
     "react-dom": "16.13.1",
-    "react-native": "https://github.com/expo/react-native/archive/sdk-40.0.1.tar.gz",
+    "react-native": "https://github.com/expo/react-native/archive/sdk-42.0.0.tar.gz",
     "react-native-button": "^3.0.1",
     "react-native-keyboard-aware-scroll-view": "^0.9.3",
     "react-native-web": "~0.13.12"
